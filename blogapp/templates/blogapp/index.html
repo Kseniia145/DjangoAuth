@@ -125,7 +125,7 @@
                     </span>
                 </div>
                 <div class="article-meta">
-                    {{ article.author }} • {{ article.publication_date }}
+                    {{ article.get_author_name }} • {{ article.publication_date }}
                 </div>
                 {% if article.image %}
                 <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image" loading="lazy" onerror="this.style.display='none'">

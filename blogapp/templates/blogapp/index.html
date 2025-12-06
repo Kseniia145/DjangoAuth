@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .articles {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .article {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .article h2 {
+            margin: 0;
+            color: #333;
+        }
+        .article-meta {
+            color: #888;
+            font-size: 14px;
+        }
+        .article-category {
+            background-color: #007bff;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .article-category i {
+            margin-right: 5px;
+        }
+        .article-text {
+            color: #666;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .article-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .article-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .no-articles {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+            background-color: white;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>Блог</h1>
+        <div style="display: flex; gap: 10px;">
+            <a href="{% url 'blogapp:categories' %}" style="color: #007bff; text-decoration: none; padding: 8px 16px; border: 1px solid #007bff; border-radius: 4px;">
+                Категорії <i class="fas fa-folder"></i>
+            </a>
+            <a href="{% url 'blogapp:all_articles' %}" style="color: #007bff; text-decoration: none; padding: 8px 16px; border: 1px solid #007bff; border-radius: 4px;">
+                Всі статті <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    <div class="articles">
+        {% if articles %}
+            {% for article in articles %}
+            <div class="article">
+                <div class="article-header">
+                    <h2><a href="{% url 'blogapp:article_detail' article.id %}" style="color: #333; text-decoration: none;">{{ article.title }}</a></h2>
+                    <span class="article-category">
+                        <i class="{{ article.category.icon }}"></i>
+                        {{ article.category.title }}
+                    </span>
+                </div>
+                <div class="article-meta">
+                    {{ article.author }} • {{ article.publication_date }}
+                </div>
+                {% if article.image %}
+                <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image" loading="lazy" onerror="this.style.display='none'">
+                {% endif %}
+                <div class="article-text">
+                    {{ article.text|truncatewords:50 }}
+                </div>
+                <div class="article-tags">
+                    {% for tag in article.tag.all %}
+                    <span class="tag">{{ tag.title }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-articles">
+                <p>Статей поки немає</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+

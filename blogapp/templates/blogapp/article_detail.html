@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ article.title }} - Блог</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .back-link {
+            color: #007bff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .article {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .article-header {
+            margin-bottom: 20px;
+        }
+        .article h1 {
+            color: #333;
+            margin: 0 0 15px 0;
+        }
+        .article-meta {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .article-category {
+            background-color: #007bff;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .article-category i {
+            margin-right: 5px;
+        }
+        .article-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .article-text {
+            color: #333;
+            line-height: 1.8;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .article-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        .tag {
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .comments-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .comments-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .comment {
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #007bff;
+        }
+        .comment-author {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .comment-date {
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        .comment-text {
+            color: #555;
+            line-height: 1.6;
+        }
+        .no-comments {
+            color: #888;
+            text-align: center;
+            padding: 20px;
+        }
+        .comment-form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+        .comment-form h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'blogapp:all_articles' %}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Назад до статей
+    </a>
+    
+    <div class="article">
+        <div class="article-header">
+            <h1>{{ article.title }}</h1>
+            <span class="article-category">
+                <i class="{{ article.category.icon }}"></i>
+                {{ article.category.title }}
+            </span>
+        </div>
+        <div class="article-meta">
+            <i class="fas fa-user"></i> {{ article.author }} • 
+            <i class="fas fa-calendar"></i> {{ article.publication_date }}
+        </div>
+        {% if article.image %}
+        <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image" loading="lazy" onerror="this.style.display='none'">
+        {% endif %}
+        <div class="article-text">
+            {{ article.text|linebreaks }}
+        </div>
+        <div class="article-tags">
+            <strong>Теги:</strong>
+            {% for tag in article.tag.all %}
+            <span class="tag">{{ tag.title }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="comments-section">
+        <h2><i class="fas fa-comments"></i> Коментарі ({{ comments|length }})</h2>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="comment-form">
+            <h3><i class="fas fa-edit"></i> Додати коментар</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.author.id_for_label }}">{{ form.author.label }}</label>
+                    {{ form.author }}
+                    {% if form.author.errors %}
+                    <div style="color: red; font-size: 12px; margin-top: 5px;">{{ form.author.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.text.id_for_label }}">{{ form.text.label }}</label>
+                    {{ form.text }}
+                    {% if form.text.errors %}
+                    <div style="color: red; font-size: 12px; margin-top: 5px;">{{ form.text.errors }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-paper-plane"></i> Відправити коментар
+                </button>
+            </form>
+        </div>
+        
+        {% if comments %}
+            {% for comment in comments %}
+            <div class="comment">
+                <div class="comment-author">
+                    <i class="fas fa-user"></i> {{ comment.author }}
+                </div>
+                <div class="comment-date">
+                    <i class="fas fa-calendar"></i> {{ comment.publication_date }}
+                </div>
+                <div class="comment-text">
+                    {{ comment.text|linebreaks }}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-comments">
+                <p>Поки що немає коментарів до цієї статті.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+

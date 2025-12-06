@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Категорії - Блог</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+        }
+        .back-link {
+            color: #007bff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .category {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .category-icon {
+            font-size: 48px;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .category h2 {
+            color: #333;
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+        .category-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .category-link {
+            display: inline-block;
+            color: #007bff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .category-link:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .no-categories {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+            background-color: white;
+            border-radius: 8px;
+        }
+        .categories-count {
+            color: #666;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Категорії</h1>
+        <a href="{% url 'blogapp:index' %}" class="back-link">
+            <i class="fas fa-arrow-left"></i> На головну
+        </a>
+    </div>
+    
+    <div class="categories-count">
+        Знайдено категорій: {{ categories|length }}
+    </div>
+    
+    <div class="categories">
+        {% if categories %}
+            {% for category in categories %}
+            <div class="category">
+                <div class="category-icon">
+                    <i class="{{ category.icon }}"></i>
+                </div>
+                <h2>{{ category.title }}</h2>
+                <div class="category-description">
+                    {{ category.description }}
+                </div>
+                <a href="{% url 'blogapp:all_articles' %}?category={{ category.id }}" class="category-link">
+                    Переглянути статті <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-categories">
+                <p>Категорій поки немає</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+

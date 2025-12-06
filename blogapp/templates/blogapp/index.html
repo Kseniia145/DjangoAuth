@@ -86,15 +86,30 @@
     </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1>Блог</h1>
-        <div style="display: flex; gap: 10px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <h1 style="margin: 0;">Блог</h1>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <a href="{% url 'blogapp:categories' %}" style="color: #007bff; text-decoration: none; padding: 8px 16px; border: 1px solid #007bff; border-radius: 4px;">
                 Категорії <i class="fas fa-folder"></i>
             </a>
             <a href="{% url 'blogapp:all_articles' %}" style="color: #007bff; text-decoration: none; padding: 8px 16px; border: 1px solid #007bff; border-radius: 4px;">
                 Всі статті <i class="fas fa-arrow-right"></i>
             </a>
+            {% if user.is_authenticated %}
+                <span style="color: #28a745; padding: 8px 16px; border: 1px solid #28a745; border-radius: 4px;">
+                    <i class="fas fa-user"></i> {{ user.username }}
+                </span>
+                <a href="{% url 'accounts:logout' %}" style="color: #dc3545; text-decoration: none; padding: 8px 16px; border: 1px solid #dc3545; border-radius: 4px;">
+                    Вийти <i class="fas fa-sign-out-alt"></i>
+                </a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}" style="color: #28a745; text-decoration: none; padding: 8px 16px; border: 1px solid #28a745; border-radius: 4px;">
+                    Увійти <i class="fas fa-sign-in-alt"></i>
+                </a>
+                <a href="{% url 'accounts:register' %}" style="color: #007bff; text-decoration: none; padding: 8px 16px; border: 1px solid #007bff; border-radius: 4px; background-color: #007bff; color: white;">
+                    Реєстрація <i class="fas fa-user-plus"></i>
+                </a>
+            {% endif %}
         </div>
     </div>
     
